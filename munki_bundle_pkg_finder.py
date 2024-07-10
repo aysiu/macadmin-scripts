@@ -9,6 +9,9 @@ sys.path.append("/usr/local/munki")
 from munkilib import dmgutils
 from munkilib import pkgutils
 
+installer_types = ['AdobeSetup', 'AdobeUberInstaller', 'AdobeAcrobatUpdater',
+                   'AdobeCS5AAMEEPackage', 'AdobeCS5PatchInstaller', 'AdobeCCPInstaller', None]
+
 if len(sys.argv) != 2:
     print('Need exactly one parameter: path to a munki repo!', file=sys.stderr)
     sys.exit(-1)
@@ -26,7 +29,7 @@ dmg_items = [{"name": item["name"],
               "package_path": item.get("package_path", "")} 
              for item in all_items
              if item.get("installer_item_location", "").endswith(".dmg") and  
-             item.get("installer_type") is None]
+             item.get("installer_type") in installer_types]
 
 items_with_bundle_style_pkgs = []
 for item in dmg_items:
